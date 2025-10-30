@@ -4,7 +4,7 @@
 .DESCRIPTION
     Script PowerShell para gerenciamento completo do WireGuard em Windows Server 2022.
 .NOTES
-    Autor: Giovani
+    Autor: Giovani - gvntrck
     Versao: 2.0.0
    
 #>
