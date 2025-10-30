@@ -11,8 +11,29 @@
 
 # Variaveis globais
 $script:ConfigPath = "$env:ProgramData\WireGuard"
-$script:WgPath = "C:\Program Files\WireGuard"
+$script:WgPath = Find-WireGuardInstallation
 $script:Logs = [System.Collections.ArrayList]::new()
+
+# Funcao para encontrar instalacao do WireGuard
+function Find-WireGuardInstallation {
+    $possiblePaths = @(
+        "C:\Program Files\WireGuard",
+        "C:\Program Files (x86)\WireGuard",
+        "${env:ProgramFiles}\WireGuard",
+        "${env:ProgramFiles(x86)}\WireGuard"
+    )
+    
+    foreach ($path in $possiblePaths) {
+        $wgExe = Join-Path $path "wg.exe"
+        if (Test-Path $wgExe) {
+            Add-Log "WireGuard encontrado em: $path" "SUCCESS"
+            return $path
+        }
+    }
+    
+    Add-Log "WireGuard nao encontrado em locais padrao" "WARNING"
+    return "C:\Program Files\WireGuard"  # Default para compatibilidade
+}
 
 # Funcao para adicionar logs
 function Add-Log {
