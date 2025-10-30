@@ -11,8 +11,15 @@
 
 # Variaveis globais
 $script:ConfigPath = "$env:ProgramData\WireGuard"
-$script:WgPath = Find-WireGuardInstallation
 $script:Logs = [System.Collections.ArrayList]::new()
+
+# Funcao para adicionar logs
+function Add-Log {
+    param([string]$Message, [string]$Level = "INFO")
+    $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+    $logEntry = "[$timestamp] [$Level] $Message"
+    $script:Logs.Add($logEntry) | Out-Null
+}
 
 # Funcao para encontrar instalacao do WireGuard
 function Find-WireGuardInstallation {
@@ -35,13 +42,8 @@ function Find-WireGuardInstallation {
     return "C:\Program Files\WireGuard"  # Default para compatibilidade
 }
 
-# Funcao para adicionar logs
-function Add-Log {
-    param([string]$Message, [string]$Level = "INFO")
-    $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
-    $logEntry = "[$timestamp] [$Level] $Message"
-    $script:Logs.Add($logEntry) | Out-Null
-}
+# Definir caminho do WireGuard apos criar as funcoes
+$script:WgPath = Find-WireGuardInstallation
 
 # Funcao de validacao
 function Test-IPAddress {
